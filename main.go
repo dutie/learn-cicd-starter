@@ -11,6 +11,7 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/cors"
 	"github.com/joho/godotenv"
+	"time"
 
 	"github.com/bootdotdev/learn-cicd-starter/internal/database"
 
@@ -19,9 +20,6 @@ import (
 
 type apiConfig struct {
 	DB *database.Queries
-}
-
-func unused() {
 }
 
 //go:embed static/*
@@ -94,8 +92,13 @@ func main() {
 	srv := &http.Server{
 		Addr:    ":" + port,
 		Handler: router,
+	        ReadHeaderTimeout: 15 * time.Second,
+	        ReadTimeout:      15 * time.Second,
+	        WriteTimeout:     10 * time.Second,
+	        IdleTimeout:      30 * time.Second,
+
+
 	}
 
-	log.Printf("Serving on port: %s\n", port)
 	log.Fatal(srv.ListenAndServe())
 }
